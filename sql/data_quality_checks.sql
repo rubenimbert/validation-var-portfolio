@@ -1,0 +1,24 @@
+-- ============================================================================
+-- TODO (you): data-quality queries. Each query should return the offending
+-- rows (an empty result = check passed). These become the "Data" chapter of
+-- the validation report.
+--
+-- 1. Missing business days: for each instrument, dates present for at least
+--    one other instrument but absent for this one (calendar misalignment,
+--    e.g. French vs US holidays). Decide and document how you treat them.
+-- 2. Stale prices: close_t = close_{t-1} for the same instrument (a repeated
+--    print often means a missing quote, not a flat market).
+-- 3. Outliers: |log_return| > 0.20 in one day. Flag, then investigate (split?
+--    data error? real crash?).
+-- 4. Gaps: more than 5 calendar days between two consecutive prices.
+-- 5. Portfolio integrity: portfolios whose weights do not sum to 1 (+/- 1e-6).
+--
+-- Suggested skeleton for check 2 (fill in the others in the same style):
+--
+-- WITH lagged AS (
+--     SELECT instrument_id, date, close,
+--            LAG(close) OVER (PARTITION BY instrument_id ORDER BY date) AS prev_close
+--     FROM prices
+-- )
+-- SELECT * FROM lagged WHERE close = prev_close;
+-- ============================================================================

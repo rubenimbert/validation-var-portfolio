@@ -1,0 +1,10 @@
+[project]
+name = "varval"
+version = "0.1.0"
+description = "Independent validation of Value-at-Risk models: implementation, backtesting and reporting"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"

@@ -1,0 +1,20 @@
+-- ============================================================================
+-- TODO (you): create a view named v_log_returns.
+--
+-- Expected columns: instrument_id, date, log_return
+-- Definition:       log_return_t = LN(close_t / close_{t-1}) per instrument,
+--                   ordered by date. The first date of each instrument has no
+--                   previous close and must NOT appear in the view.
+--
+-- Hints:
+--   * LAG(close) OVER (PARTITION BY instrument_id ORDER BY date)
+--   * wrap the LAG in a CTE, then filter out the NULL previous close.
+--   * LN() exists in SQLite >= 3.35 with math functions enabled and in
+--     PostgreSQL. The test fixture registers LN() anyway, so you are safe.
+--
+-- The test in tests/test_sql.py::test_log_returns_view loads this file and
+-- checks the values for a 3-day price series.
+-- ============================================================================
+
+-- CREATE VIEW IF NOT EXISTS v_log_returns AS
+-- ...
