@@ -24,7 +24,7 @@ def log_returns(prices: pd.DataFrame) -> pd.DataFrame:
     The first row (no previous price) is dropped, so the result has
     ``len(prices) - 1`` rows and the same columns.
     """
-    raise NotImplementedError
+    return (np.log(prices) - np.log(prices.shift(1))).dropna()
 
 
 def portfolio_returns(returns: pd.DataFrame, weights: np.ndarray) -> pd.Series:
@@ -33,7 +33,7 @@ def portfolio_returns(returns: pd.DataFrame, weights: np.ndarray) -> pd.Series:
     ``weights`` is aligned with ``returns.columns`` and should sum to 1.
     Returns a Series indexed like ``returns``.
     """
-    raise NotImplementedError
+    return returns@weights
 
 
 def portfolio_pnl(returns: pd.DataFrame, weights: np.ndarray, market_value: float) -> pd.Series:
@@ -41,4 +41,4 @@ def portfolio_pnl(returns: pd.DataFrame, weights: np.ndarray, market_value: floa
 
     Positive = gain, negative = loss. VaR functions consume this series.
     """
-    raise NotImplementedError
+    return market_value * portfolio_returns(returns, weights)
