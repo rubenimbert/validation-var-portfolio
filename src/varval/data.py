@@ -54,7 +54,10 @@ def upsert_instruments(conn: sqlite3.Connection, instruments: pd.DataFrame) -> N
     Use ``INSERT OR IGNORE`` so the function is idempotent (running it twice
     must not fail and must not duplicate rows).
     """
-    raise NotImplementedError
+    sql = "INSERT OR IGNORE INTO instruments(ticker, name, asset_class, currency) VALUES (?, ?, ?, ?)"
+    lignes = instruments[["ticker", "name", "asset_class", "currency"]].itertuples(index=False)
+    conn.executemany(sql, lignes)
+    conn.commit()  
 
 
 def load_prices_to_db(conn: sqlite3.Connection, prices: pd.DataFrame,
