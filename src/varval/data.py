@@ -72,7 +72,13 @@ def load_prices_to_db(conn: sqlite3.Connection, prices: pd.DataFrame,
 
     Tested by tests/test_sql.py::test_prices_round_trip.
     """
-    raise NotImplementedError
+    correspondance = dict(conn.execute("SELECT ticker, instrument_id FROM instruments").fetchall())
+    ids = prices["ticker"].map(correspondance)
+    sql = "INSERT OR REPLACE INTO prices(instrument_id, date, close, source) VALUES (?, ?, ?, ?)"
+    lignes = list(zip(ids, prices["date"], prices["close"], [source] * len(prices)))
+    conn.executemany(sql, lignes)
+    conn.commit()
+    return len(lignes)
 
 
 def read_prices(conn: sqlite3.Connection, tickers: list[str] | None = None) -> pd.DataFrame:
@@ -85,3 +91,4 @@ def read_prices(conn: sqlite3.Connection, tickers: list[str] | None = None) -> p
     Tested by tests/test_sql.py::test_prices_round_trip.
     """
     raise NotImplementedError
+
